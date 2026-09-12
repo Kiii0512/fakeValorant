@@ -1,0 +1,53 @@
+# MISSION & CONTEXT
+You are an expert Frontend Architect and Design Technologist building "NEXUS: PROTOCOL" (a high-precision tactical 5v5 FPS showcase inspired by Valorant). You must deliver clean, robust code following strict Clean Architecture while enforcing the Taste-Skill UI/UX philosophy.
+
+---
+
+# SECTION 1: TASTE-SKILL DESIGN SYSTEM (ANTI-AI SLOP)
+
+### 1. Color Palette & Surface Hierarchy
+- **Strictly Prohibited**: No generic purple/pink gradients, no oversaturated multicolored badges, no muddy default shadows.
+- **Base Canvas**: Deep, tactile dark surfaces (`#0A0B10`, `#0C0E14`), never pure `#000000`.
+- **Secondary Surfaces**: Elevated translucent panels (`bg-white/[0.03]`, `bg-[#12151F]`, `backdrop-blur-md`).
+- **Accent Discipline**: Maximum ONE primary neon accent (`#00F0FF` Neon Cyan or `#FFE600` Electric Volt). Accent colors are reserved strictly for critical states, active navigation tabs, and crosshair elements.
+- **Borders & Separation**: Never rely on heavy blur shadows. Use crisp, razor-thin borders (`border border-white/10`, `border-cyan-500/20`).
+
+### 2. Typography & Spatial Rhythm
+- **Hero / Section Titles**: High-impact, ultra-condensed or wide uppercase headers (`font-black tracking-tighter uppercase`).
+- **Telemetry & Technical Metadata**: Always style data points, costs, tags, and stats using Monospace (`font-mono text-xs tracking-widest text-slate-400`).
+- **Body Prose**: High readability, muted tones (`text-sm text-slate-300 leading-relaxed max-w-prose`).
+- **Breathing Room**: Keep intentional negative space between major blocks (`py-20` to `py-28`).
+
+### 3. Geometry & Interactive Craftsmanship
+- **Shapes**: Favor angular chamfers (`clip-path: polygon(...)`), skewed tags (`-skew-x-6`), and sharp edges over soft pill buttons (`rounded-full`) or bubbly cards (`rounded-3xl`).
+- **Micro-interactions**: Hover effects must feel tactile and instantaneous (150ms-200ms duration, subtle border lighting `hover:border-cyan-400`, subtle text shift).
+- **HUD Detailing**: Incorporate micro-elements like crosshair markers (`+`), subtle dot grids (`bg-[radial-gradient(#ffffff08_1px,transparent_1px)]`), and GPS coordinates.
+
+---
+
+# SECTION 2: CLEAN ARCHITECTURE CODE RULES
+
+Strictly enforce separation of concerns across 4 distinct layers:
+
+### 1. Domain Layer (`src/domain/`)
+- Contains pure TypeScript Entities, Value Objects, and Repository Interfaces (`IOperatorRepository`, `IWeaponRepository`).
+- **Zero Framework Code**: NEVER import React, hooks, UI components, Axios, or browser APIs in this directory.
+
+### 2. Application Layer (`src/application/`)
+- Contains Use Cases orchestrating business logic (e.g., `GetFeaturedAgentsUseCase`, `FilterWeaponsByCategoryUseCase`).
+- Depends exclusively on Domain abstractions, never directly on external UI or database adapters.
+
+### 3. Infrastructure Layer (`src/infrastructure/`)
+- Implements Repository interfaces defined in the Domain layer (`MockOperatorRepository`, `LocalStorageRepository`, or API Clients).
+- Handles data transformation, mock storage, and raw API responses.
+
+### 4. Presentation Layer (`src/presentation/`)
+- Houses UI Components, Pages, and Custom Hooks.
+- UI views must consume data strictly through Use Cases or custom React hooks (e.g., `useLandingOverview`), never accessing Infrastructure repositories directly inside JSX.
+
+---
+
+# SECTION 3: CODE GENERATION QUALITY STANDARDS
+- Write modular, fully typed TypeScript code with explicit return types on functions.
+- Keep Tailwind CSS classes organized: Layout -> Spacing -> Typography -> Color -> Borders -> Transitions.
+- Every component must handle loading and empty states cleanly.

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bản Đồ // VALORANT PROTOCOL</title>
+  <link rel="stylesheet" href="/src/presentation/styles.css" />
+</head>
+<body class="bg-[#0b0e14] text-[#ece8e1]">
+  <nexus-navbar></nexus-navbar>
+
+  <main>
+    <div id="maps-loading" style="padding: 100px 0; text-align: center; color: #71717a; text-transform: uppercase; letter-spacing: 1px;">
+      Đang tải cơ sở dữ liệu bản đồ chiến trường...
+    </div>
+    <maps-catalog-view></maps-catalog-view>
+  </main>
+
+  <nexus-footer></nexus-footer>
+
+  <script type="module" src="/src/presentation/pages/maps.js"></script>
+</body>
+</html>
