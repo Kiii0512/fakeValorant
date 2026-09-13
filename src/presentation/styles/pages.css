@@ -1,33 +1,262 @@
 .app-shell { overflow: hidden; background: var(--canvas); }
 
-.hero { display: flex; min-height: 760px; overflow: hidden; padding: 190px 10vw 80px; position: relative; }
+/* HERO BENTO / MINIMALIST TACTICAL BANNER CHUẨN MẪU */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 130px 24px 60px;
+  background: #080b11;
+  box-sizing: border-box;
+}
 
-.hero__grid { background-image: linear-gradient(rgba(0, 240, 255, .055) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 240, 255, .055) 1px, transparent 1px); background-size: 72px 72px; inset: 0; mask-image: linear-gradient(to bottom, #000 0%, transparent 92%); opacity: .6; position: absolute; }
+/* VIDEO BACKGROUND & RADIAL OVERLAY */
+.hero__video-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
+}
 
-.hero__grid::after { border: 1px solid rgba(0, 240, 255, .15); content: ''; height: 360px; position: absolute; right: 13vw; top: 190px; transform: skewY(-28deg); width: 360px; }
+.hero__video-bg video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.35;
+  filter: contrast(1.1) saturate(0.9);
+}
 
-.hero__content { max-width: 800px; position: relative; z-index: 1; }
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 30%, rgba(13, 20, 36, 0.45) 0%, rgba(8, 11, 17, 0.95) 85%);
+  z-index: 2;
+}
 
-.hero h1, h2, h3, p { margin-top: 0; }
+/* LƯỚI GRID MẢNH MỜ TRANG TRÍ */
+.hero__grid {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(0, 240, 255, 0.04) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(0, 240, 255, 0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.8) 0%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.8) 0%, transparent 80%);
+  pointer-events: none;
+  z-index: 3;
+}
 
-.hero h1 { color: var(--ink); font-family: var(--display); font-size: 104px; font-weight: 800; letter-spacing: -.035em; line-height: .82; margin-bottom: 34px; text-transform: uppercase; }
+/* NỘI DUNG CHÍNH Ở GIỮA BANNER */
+.hero__content {
+  position: relative;
+  z-index: 10;
+  max-width: 880px;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-.hero h1 em { color: var(--cyan); font-style: normal; }
+/* PILL BADGE STATUS */
+.hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 18px;
+  border-radius: 9999px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-family: var(--mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: #e2e8f0;
+  margin-bottom: 28px;
+}
 
-.hero__dek { color: var(--muted); font-size: 17px; line-height: 1.6; max-width: 430px; }
+.hero__badge .dot-live {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00f0ff;
+  box-shadow: 0 0 8px #00f0ff;
+}
 
-.hero__actions { align-items: center; display: flex; gap: 28px; margin-top: 42px; }
+.hero__badge .sep {
+  color: #475569;
+}
 
-.hero__telemetry { color: var(--faint); font-family: var(--mono); font-size: 9px; letter-spacing: .13em; position: absolute; text-transform: uppercase; }
+.hero__badge .text-sub {
+  color: #94a3b8;
+}
 
-.hero__telemetry--top { right: 5vw; top: 112px; }
+/* TIÊU ĐỀ CHÍNH THEO PHONG CÁCH SOFT MODERN ELEGANT */
+.hero h1 {
+  font-family: 'Be Vietnam Pro', sans-serif !important;
+  font-size: clamp(40px, 6.2vw, 72px) !important;
+  font-weight: 500 !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.025em !important;
+  text-transform: none !important;
+  color: #ffffff;
+  margin: 0 0 20px;
+}
 
-.hero__telemetry--side { bottom: 124px; right: 5vw; writing-mode: vertical-rl; }
+.hero h1 .highlight {
+  font-weight: 600;
+  color: #dbeafe;
+}
 
-.hero__status { align-items: center; bottom: 42px; color: var(--muted); display: flex; font-family: var(--mono); font-size: 9px; gap: 10px; letter-spacing: .13em; position: absolute; right: 5vw; }
+/* ĐOẠN VĂN MÔ TẢ */
+.hero__dek {
+  max-width: 680px;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+  color: #94a3b8;
+  margin: 0 0 36px;
+  text-align: center;
+}
 
-.hero__status-rule { background: var(--line); display: inline-block; height: 1px; margin: 0 6px; width: 36px; }
+/* CỤM NÚT HÀNH ĐỘNG */
+.hero__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 0;
+  margin-bottom: 64px;
+  flex-wrap: wrap;
+}
 
+.btn-primary-glow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 28px;
+  border-radius: 9999px;
+  background: #c7f0ff;
+  color: #04131f;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 0 24px rgba(199, 240, 255, 0.35);
+  transition: all 0.2s ease;
+}
+
+.btn-primary-glow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 32px rgba(199, 240, 255, 0.6);
+}
+
+.btn-glass {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #e2e8f0;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+}
+
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.btn-text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 16px;
+  color: #94a3b8;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.btn-text-link:hover {
+  color: #fff;
+}
+
+/* HÀNG METRICS TELEMETRY ĐÁY HERO */
+.hero__telemetry-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  width: 100%;
+  max-width: 900px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  padding-top: 32px;
+}
+
+.hero__telemetry-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: center;
+}
+
+.hero__telemetry-item .t-label {
+  font-family: var(--mono, monospace);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.hero__telemetry-item .t-val {
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.hero__telemetry-item .highlight-cyan {
+  color: #00f0ff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.dot-inline {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00f0ff;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 110px 16px 50px;
+  }
+  .hero__telemetry-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+/* PHẦN CÁC SECTION VÀ COMPONENT TIẾP THEO GIỮ NGUYÊN TOÀN BỘ */
 .section { border-top: 1px solid var(--line); padding: 130px 10vw; position: relative; }
 
 .section-heading, .showcase__heading { display: flex; justify-content: space-between; margin-bottom: 64px; }
@@ -885,4 +1114,3 @@ entity-detail.is-open { display: block; }
 .specs-table td.val-col {
   color: #a1a1aa;
 }
-

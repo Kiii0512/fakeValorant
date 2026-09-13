@@ -1,5 +1,4 @@
-const API_BASE = 'http://localhost:5153/api';
-
+const API_BASE = 'https://fakevalorant-backend.onrender.com/api';
 export class ApiAdminRepository {
   async uploadFile(file, bucket = 'agent-media') {
     if (!file) return '';

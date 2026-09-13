@@ -10,150 +10,336 @@ class NexusNavbar extends HTMLElement {
 
     this.innerHTML = `
       <style>
+        nexus-navbar {
+          display: block;
+          position: absolute;
+          top: 24px;
+          left: 0;
+          right: 0;
+          z-index: 100;
+          padding: 0 24px;
+          box-sizing: border-box;
+        }
+
+        /* KHUNG CAPSULE CHUẨN */
+        nexus-navbar .site-nav {
+          max-width: 1600px;
+          width: 100%;
+          height: 68px;
+          margin: 0 auto;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 44px;
+          box-sizing: border-box;
+          background: rgba(12, 17, 28, 0.82);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 9999px;
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+        }
+
+        /* LOGO & BRAND */
+        nexus-navbar .site-nav__brand {
+          display: inline-flex;
+          align-items: center;
+          gap: 12px;
+          text-decoration: none;
+          color: #fff;
+          flex-shrink: 0;
+          white-space: nowrap;
+        }
+
+        nexus-navbar .brand-icon {
+          width: 34px;
+          height: 34px;
+          border-radius: 50%;
+          background: rgba(0, 240, 255, 0.1);
+          border: 1px solid rgba(0, 240, 255, 0.28);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--cyan, #00f0ff);
+          flex-shrink: 0;
+        }
+
+        nexus-navbar .brand-icon svg {
+          width: 18px !important;
+          height: 18px !important;
+          max-width: 18px !important;
+          max-height: 18px !important;
+          display: block;
+        }
+
+        nexus-navbar .brand-text {
+          font-family: 'Be Vietnam Pro', sans-serif;
+          font-size: 16px;
+          font-weight: 700;
+          letter-spacing: -0.01em;
+          color: #fff;
+          white-space: nowrap;
+        }
+
+        nexus-navbar .brand-text span {
+          color: #64748b;
+          font-weight: 400;
+          font-size: 14px;
+        }
+
+        nexus-navbar .version-pill {
+          font-family: var(--font-mono, monospace);
+          font-size: 11px;
+          padding: 3px 10px;
+          border-radius: 9999px;
+          background: rgba(0, 240, 255, 0.08);
+          border: 1px solid rgba(0, 240, 255, 0.22);
+          color: var(--cyan, #00f0ff);
+          white-space: nowrap;
+        }
+
+        /* MENU Ở GIỮA */
         nexus-navbar .site-nav__links {
           display: flex;
           align-items: center;
-          gap: 28px;
+          justify-content: center;
+          gap: 12px;
+          flex: 1;
         }
-        nexus-navbar .site-nav__links > a {
+
+        nexus-navbar .site-nav__links > a,
+        nexus-navbar .nav-dropdown summary {
+          padding: 8px 18px;
+          font-size: 14px;
+          font-family: 'Be Vietnam Pro', sans-serif;
+          font-weight: 500;
+          color: #94a3b8;
+          text-decoration: none;
+          border-radius: 9999px;
+          transition: all 0.2s ease;
           display: inline-flex;
           align-items: center;
-          height: 100%;
+          gap: 7px;
+          white-space: nowrap;
+          flex-shrink: 0;
+          line-height: 1.2;
         }
+
+        nexus-navbar .site-nav__links > a:hover,
+        nexus-navbar .nav-dropdown summary:hover,
+        nexus-navbar .nav-dropdown[open] summary {
+          color: #fff;
+          background: rgba(255, 255, 255, 0.08);
+        }
+
+        nexus-navbar .site-nav__links > a.active {
+          background: rgba(255, 255, 255, 0.14);
+          color: #fff;
+          font-weight: 600;
+        }
+
+        /* FIX TRIỆT ĐỂ LỖI MŨI TÊN SVG KHỔNG LỒ */
         nexus-navbar .nav-dropdown {
           position: relative;
           display: inline-flex;
           align-items: center;
         }
+
         nexus-navbar .nav-dropdown summary {
           list-style: none;
           cursor: pointer;
           user-select: none;
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          line-height: 1;
         }
+
         nexus-navbar .nav-dropdown summary::-webkit-details-marker {
           display: none;
         }
-        nexus-navbar .nav-dropdown summary .nav-caret {
-          width: 8px;
-          height: 8px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
+
+        nexus-navbar .nav-dropdown summary svg.nav-caret {
+          width: 8px !important;
+          height: 5px !important;
+          min-width: 8px !important;
+          max-width: 8px !important;
+          min-height: 5px !important;
+          max-height: 5px !important;
+          display: inline-block !important;
+          flex-shrink: 0 !important;
           transition: transform 0.2s ease;
-          color: var(--cyan, #00f5d4);
+          color: #64748b;
         }
-        nexus-navbar .nav-dropdown[open] summary .nav-caret {
+
+        nexus-navbar .nav-dropdown[open] summary svg.nav-caret {
           transform: rotate(180deg);
         }
+
         nexus-navbar .nav-dropdown[open] .nav-dropdown__menu {
           display: flex;
           flex-direction: column;
           position: absolute;
-          top: 100%;
+          top: calc(100% + 14px);
           left: 0;
+          background: rgba(13, 19, 32, 0.96);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          border-radius: 14px;
+          min-width: 190px;
+          padding: 8px;
+          box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
           z-index: 1000;
-          background: #0f1923;
-          border: 1px solid var(--line, #28344e);
-          min-width: 170px;
-          margin-top: 14px;
         }
+
         nexus-navbar .nav-dropdown__menu a {
-          padding: 10px 16px;
-          color: #e8edf2;
-          font-size: 12px;
+          padding: 10px 14px;
+          color: #cbd5e1;
+          font-size: 13px;
+          font-family: 'Be Vietnam Pro', sans-serif;
           text-decoration: none;
-          transition: background 0.2s ease;
+          border-radius: 8px;
+          white-space: nowrap;
+          transition: all 0.15s ease;
         }
+
         nexus-navbar .nav-dropdown__menu a:hover {
-          background: rgba(0, 245, 212, 0.1);
-          color: var(--cyan, #00f5d4);
+          background: rgba(0, 240, 255, 0.12);
+          color: var(--cyan, #00f0ff);
         }
+
+        /* NÚT CTA BÊN PHẢI */
         nexus-navbar .site-nav__cta {
           display: inline-flex;
           align-items: center;
-          justify-content: center;
           gap: 8px;
-          line-height: 1;
+          height: 42px;
+          padding: 0 22px;
+          border-radius: 9999px;
+          font-family: 'Be Vietnam Pro', sans-serif;
+          font-size: 14px;
+          font-weight: 600;
+          background: rgba(255, 255, 255, 0.08);
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          color: #fff;
+          text-decoration: none;
+          white-space: nowrap;
+          flex-shrink: 0;
+          transition: all 0.2s ease;
+        }
+
+        nexus-navbar .site-nav__cta svg {
+          width: 12px !important;
+          height: 12px !important;
+          max-width: 12px !important;
+          max-height: 12px !important;
+          display: inline-block;
+          flex-shrink: 0;
+        }
+
+        nexus-navbar .site-nav__cta:hover {
+          background: #fff;
+          color: #0b0f17;
+          box-shadow: 0 0 24px rgba(255, 255, 255, 0.4);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1200px) {
+          nexus-navbar .site-nav {
+            padding: 0 24px;
+            height: 62px;
+          }
+          nexus-navbar .site-nav__links {
+            gap: 6px;
+          }
+          nexus-navbar .site-nav__links > a,
+          nexus-navbar .nav-dropdown summary {
+            padding: 7px 12px;
+            font-size: 13px;
+          }
+        }
+
+        @media (max-width: 860px) {
+          nexus-navbar {
+            top: 14px;
+            padding: 0 12px;
+          }
+          nexus-navbar .site-nav {
+            height: 54px;
+            padding: 0 16px;
+          }
+          nexus-navbar .site-nav__links,
+          nexus-navbar .version-pill {
+            display: none;
+          }
+          nexus-navbar .site-nav__cta {
+            height: 36px;
+            padding: 0 16px;
+            font-size: 12px;
+          }
         }
       </style>
+
       <header class="site-nav">
-        <a class="site-nav__brand nexus-logo" href="index.html" aria-label="Nexus Protocol home">
-          <svg class="nexus-logo__mark" viewBox="0 0 36 36" aria-hidden="true"><path class="nexus-logo__outline" d="M5 5h26v26H5z"/><path class="nexus-logo__slash" d="M9 25 25 9h6L15 25z"/><path class="nexus-logo__cut" d="M5 19 19 5h5L10 19z"/></svg>
-          <span class="nexus-logo__wordmark"><strong>NEXUS</strong><span> / PROTOCOL</span></span>
+        <a class="site-nav__brand" href="index.html">
+          <div class="brand-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+              <polyline points="2 17 12 22 22 17"/>
+              <polyline points="2 12 12 17 22 12"/>
+            </svg>
+          </div>
+          <div class="brand-text">Nexus <span>/ protocol</span></div>
+          <span class="version-pill">v8.11</span>
         </a>
-        <nav class="site-nav__links" aria-label="Primary navigation">
+
+        <nav class="site-nav__links">
+          <a href="index.html" class="active">Trang Chủ</a>
           <details class="nav-dropdown">
             <summary>
-              <span>THÔNG TIN TRÒ CHƠI</span>
-              <svg class="nav-caret" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <span>Thông Tin Trò Chơi</span>
+              <svg class="nav-caret" width="8" height="5" viewBox="0 0 8 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 1L4 4L7 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </summary>
             <div class="nav-dropdown__menu">
-              <a href="agents.html">ĐẶC VỤ</a>
-              <a href="arsenal.html">KHO VŨ KHÍ</a>
-              <a href="maps.html">BẢN ĐỒ</a>
+              <a href="agents.html">Đặc Vụ</a>
+              <a href="arsenal.html">Kho Vũ Khí</a>
+              <a href="maps.html">Bản Đồ</a>
             </div>
           </details>
-
+          <a href="news.html">Tin Tức</a>
           <details class="nav-dropdown">
             <summary>
-              <span>HỖ TRỢ</span>
-              <svg class="nav-caret" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <span>Hỗ Trợ</span>
+              <svg class="nav-caret" width="8" height="5" viewBox="0 0 8 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 1L4 4L7 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </summary>
             <div class="nav-dropdown__menu">
-              <a href="${supportMailto}">HỖ TRỢ</a>
-              <a href="specs.html">THÔNG SỐ CẤU HÌNH</a>
+              <a href="${supportMailto}">Gửi Yêu Cầu</a>
+              <a href="specs.html">Cấu Hình Máy</a>
             </div>
           </details>
-
-          <a href="news.html">TIN TỨC</a>
-          <a href="index.html">TRANG CHỦ</a>
         </nav>
-        <a class="button button--volt site-nav__cta" href="agents.html">
-          <span>CHƠI NGAY</span>
-          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+        <a class="site-nav__cta" href="agents.html">
+          <span>Bắt đầu ngay</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
         </a>
-      </header>`;
+      </header>
+    `;
   }
 
   bindHoverDropdowns() {
-    const dropdowns = this.querySelectorAll('.nav-dropdown');
-
-    dropdowns.forEach((dropdown) => {
-      let closeTimeout = null;
-
-      const openDropdown = () => {
-        if (closeTimeout) {
-          clearTimeout(closeTimeout);
-          closeTimeout = null;
-        }
+    this.querySelectorAll('.nav-dropdown').forEach((dropdown) => {
+      let timeout = null;
+      dropdown.addEventListener('mouseenter', () => {
+        if (timeout) clearTimeout(timeout);
         dropdown.setAttribute('open', '');
-      };
-
-      const closeDropdown = () => {
-        closeTimeout = setTimeout(() => {
-          dropdown.removeAttribute('open');
-        }, 120);
-      };
-
-      dropdown.addEventListener('mouseenter', openDropdown);
-      dropdown.addEventListener('mouseleave', closeDropdown);
-
-      const summary = dropdown.querySelector('summary');
-      if (summary) {
-        summary.addEventListener('click', (e) => {
-          e.preventDefault();
-        });
-      }
+      });
+      dropdown.addEventListener('mouseleave', () => {
+        timeout = setTimeout(() => dropdown.removeAttribute('open'), 120);
+      });
     });
   }
 }

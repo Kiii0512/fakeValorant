@@ -1,5 +1,7 @@
 import { ApiGameRepository } from '../../infrastructure/repositories/ApiGameRepository.js';
 
+const API_BASE = 'https://fakevalorant-backend.onrender.com/api';
+
 const escapeHtml = (value = '') => String(value)
   .replaceAll('&', '&amp;')
   .replaceAll('<', '&lt;')
@@ -32,7 +34,7 @@ export class AdminArticleForm extends HTMLElement {
         onUpload: async (file, bucket = 'agent-media') => {
           const fd = new FormData();
           fd.append('file', file);
-          const res = await fetch(`http://localhost:5153/api/admin/upload?bucket=${bucket}`, { method: 'POST', body: fd });
+          const res = await fetch(`${API_BASE}/admin/upload?bucket=${bucket}`, { method: 'POST', body: fd });
           const d = await res.json();
           return d.url || d.Url || '';
         }
@@ -49,9 +51,8 @@ export class AdminArticleForm extends HTMLElement {
         articles = await this._h.onLoadArticles();
       }
 
-      // Fallback gọi trực tiếp backend nếu articles trả về rỗng hoặc thiếu trường
       if (!articles || articles.length === 0) {
-        const res = await fetch('http://localhost:5153/api/articles');
+        const res = await fetch(`${API_BASE}/articles`);
         if (res.ok) {
           articles = await res.json();
         }
@@ -383,7 +384,6 @@ export class AdminArticleForm extends HTMLElement {
       </table>
     `;
 
-    // Toggle Featured Event với Optimistic Update
     wrap.querySelectorAll('[data-article-toggle]').forEach((btn) => {
       btn.onclick = async (e) => {
         e.preventDefault();
@@ -397,7 +397,6 @@ export class AdminArticleForm extends HTMLElement {
         btn.textContent = 'ĐANG ĐỔI...';
 
         try {
-          // Gọi API PATCH trực tiếp qua repository hoặc endpoint
           let toggleHandler = this._h?.onToggleFeatured;
           if (!toggleHandler) {
             toggleHandler = (artId, state) => defaultRepo.toggleArticleFeatured(artId, state);
@@ -405,7 +404,6 @@ export class AdminArticleForm extends HTMLElement {
 
           await toggleHandler(id, nextState);
 
-          // Cập nhật trạng thái ngay lập tức trên bộ nhớ đệm
           const target = this._articles.find(x => String(x.id).toLowerCase() === String(id).toLowerCase());
           if (target) {
             target.isFeatured = nextState;
@@ -413,13 +411,11 @@ export class AdminArticleForm extends HTMLElement {
             target.IsFeatured = nextState;
           }
 
-          // Cập nhật nút bấm trực tiếp
           btn.dataset.current = String(nextState);
           btn.className = `btn-toggle ${nextState ? 'active' : 'inactive'}`;
           btn.textContent = nextState ? '★ NỔI BẬT' : '☆ BÌNH THƯỜNG';
           btn.disabled = false;
 
-          // Đồng bộ lại toàn bộ danh sách
           await this.loadArticles();
         } catch (err) {
           alert(err.message || 'Lỗi cập nhật cờ nổi bật');
@@ -430,7 +426,6 @@ export class AdminArticleForm extends HTMLElement {
       };
     });
 
-    // Edit Article Event
     wrap.querySelectorAll('[data-edit-article]').forEach((btn) => {
       btn.onclick = () => {
         const id = btn.dataset.editArticle;
@@ -439,7 +434,6 @@ export class AdminArticleForm extends HTMLElement {
       };
     });
 
-    // Delete Article Event
     wrap.querySelectorAll('[data-del-article]').forEach((btn) => {
       btn.onclick = async () => {
         if (!confirm('Bạn có chắc chắn muốn xóa vĩnh viễn bài viết này?')) return;

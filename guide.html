@@ -172,6 +172,8 @@
       import './src/presentation/components/NexusNavbar.js';
       import './src/presentation/components/NexusFooter.js';
 
+      const API_BASE_URL = 'https://fakevalorant-backend.onrender.com';
+
       // Chuyển đổi mọi định dạng link YouTube thành link embed
       const formatYoutubeEmbed = (url) => {
         if (!url) return '';
@@ -182,8 +184,8 @@
       const loadGuideData = async () => {
         try {
           const [guideRes, newsRes] = await Promise.all([
-            fetch('http://localhost:5153/api/guide'),
-            fetch('http://localhost:5153/api/articles/featured')
+            fetch(`${API_BASE_URL}/api/guide`),
+            fetch(`${API_BASE_URL}/api/articles/featured`)
           ]);
 
           if (guideRes.ok) {

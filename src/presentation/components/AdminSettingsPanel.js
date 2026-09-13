@@ -1,3 +1,5 @@
+const API_BASE = 'https://fakevalorant-backend.onrender.com/api';
+
 export class AdminSettingsPanel extends HTMLElement {
   set handlers(value) {
     this._h = value;
@@ -27,7 +29,7 @@ export class AdminSettingsPanel extends HTMLElement {
   async load() {
     if (!this.isConnected) return;
     try {
-      const response = await fetch('http://localhost:5153/api/admin/settings/hero-video');
+      const response = await fetch(`${API_BASE}/admin/settings/hero-video`);
       if (!response.ok) return;
       const data = await response.json();
       const url = data.url || data.Url || '';
@@ -40,9 +42,25 @@ export class AdminSettingsPanel extends HTMLElement {
 
   setStatus(message, isError = false) {
     const status = this.querySelector('#settings-status');
+    if (!status) return;
     status.className = `admin-message ${isError ? 'msg-error' : 'msg-success'}`;
     status.textContent = message;
     status.hidden = false;
+  }
+
+  async _uploadVideo(file) {
+    if (this._h?.onUpload) {
+      return await this._h.onUpload(file, 'agent-media');
+    }
+    const formData = new FormData();
+    formData.append('file', file);
+    const res = await fetch(`${API_BASE}/admin/upload?bucket=agent-media`, {
+      method: 'POST',
+      body: formData
+    });
+    if (!res.ok) throw new Error('Không thể upload video lên máy chủ Render.');
+    const data = await res.json();
+    return data.url || data.Url || '';
   }
 
   async save() {
@@ -54,12 +72,16 @@ export class AdminSettingsPanel extends HTMLElement {
       let url = this.querySelector('#hero-video-url-input').value.trim();
       if (file) {
         button.textContent = 'ĐANG UPLOAD VIDEO...';
-        url = await this._h.onUpload(file, 'agent-media');
+        url = await this._uploadVideo(file);
       }
       if (!url) throw new Error('Vui lòng chọn file video hoặc nhập URL.');
-      const response = await fetch('http://localhost:5153/api/admin/settings/hero-video', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url })
+
+      const response = await fetch(`${API_BASE}/admin/settings/hero-video`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url })
       });
+
       if (!response.ok) throw new Error('Không thể lưu video vào database.');
       this.querySelector('#hero-video-url-input').value = url;
       this.querySelector('#hero-preview-video').src = url;

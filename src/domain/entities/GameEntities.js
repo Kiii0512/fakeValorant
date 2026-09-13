@@ -1,7 +1,19 @@
 export class AgentEntity {
-  constructor({ id, codename, role, bio, description, avatarUrl, abilities, abilityDetails, isFeatured = false }) {
+  constructor({
+    id,
+    codename,
+    agentNumber, // <-- Thêm tham số này
+    role,
+    bio,
+    description,
+    avatarUrl,
+    abilities,
+    abilityDetails,
+    isFeatured
+  } = {}) {
     this.id = id;
     this.codename = codename;
+    this.agentNumber = agentNumber || ''; // <-- Gán thuộc tính này
     this.role = role;
     this.bio = bio;
     this.description = description;

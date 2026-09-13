@@ -1,3 +1,5 @@
+const API_BASE = 'https://fakevalorant-backend.onrender.com/api';
+
 export class AdminGuidePanel extends HTMLElement {
   set handlers(h) {
     this._h = h;
@@ -12,7 +14,7 @@ export class AdminGuidePanel extends HTMLElement {
 
   async loadGuide() {
     try {
-      const res = await fetch('http://localhost:5153/api/guide');
+      const res = await fetch(`${API_BASE}/guide`);
       if (!res.ok) return;
       const data = await res.json();
       this.populateGuide(data);
@@ -93,7 +95,6 @@ export class AdminGuidePanel extends HTMLElement {
       </section>
     `;
 
-    // Preview tức thì khi chọn file banner mới
     const bannerInput = this.querySelector('#guide-banner-file');
     const bannerPreview = this.querySelector('#guide-banner-preview');
     bannerInput.onchange = () => {
@@ -163,14 +164,13 @@ export class AdminGuidePanel extends HTMLElement {
     container.appendChild(row);
   }
 
-  // Fallback upload an toàn nếu handler chưa được inject
   async _uploadFile(file) {
     if (this._h?.onUpload) {
       return await this._h.onUpload(file, 'agent-media');
     }
     const fd = new FormData();
     fd.append('file', file);
-    const res = await fetch('http://localhost:5153/api/admin/upload?bucket=agent-media', {
+    const res = await fetch(`${API_BASE}/admin/upload?bucket=agent-media`, {
       method: 'POST',
       body: fd
     });
@@ -235,7 +235,7 @@ export class AdminGuidePanel extends HTMLElement {
         chapters: chapters
       };
 
-      const res = await fetch('http://localhost:5153/api/guide', {
+      const res = await fetch(`${API_BASE}/guide`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

@@ -2,8 +2,7 @@ import { AgentEntity, MapEntity, WeaponEntity } from '../../domain/entities/Game
 import { ArticleEntity } from '../../domain/entities/ArticleEntity.js';
 import { IGameRepository } from '../../domain/repositories/IGameRepository.js';
 
-const API_BASE = 'http://localhost:5153/api';
-
+const API_BASE = 'https://fakevalorant-backend.onrender.com/api';
 const normalizeRole = (role = '') => {
   const r = role.toLowerCase();
   if (r.includes('kiểm soát') || r.includes('controller')) return 'Controller';
@@ -41,9 +40,10 @@ return data.map((item) => {
           }
         });
 
-        return new AgentEntity({
+return new AgentEntity({
           id: item.id,
           codename: item.name,
+          agentNumber: item.agent_number || item.agentNumber || item.number || '',
           role: normalizeRole(item.role),
           bio: item.bio,
           description: item.bio ? (item.bio.slice(0, 75) + '...') : '',
