@@ -1,9 +1,18 @@
-import { GetNewsUseCase } from '../../application/usecases/GetNewsUseCase.js';
-import { MockGameRepository } from '../../infrastructure/repositories/MockGameRepository.js';
+import { GetArticlesUseCase } from '../../application/usecases/GetArticlesUseCase.js';
+import { ApiGameRepository } from '../../infrastructure/repositories/ApiGameRepository.js';
 import '../components/NexusNavbar.js';
 import '../components/NexusFooter.js';
 import './NewsPage.js';
 
-const repository = new MockGameRepository();
-const articles = new GetNewsUseCase(repository).execute();
-document.querySelector('news-page').data = articles;
+const view = document.querySelector('news-page');
+
+async function loadArticles() {
+	try {
+		const articles = await new GetArticlesUseCase(new ApiGameRepository()).execute();
+		view.data = articles;
+	} catch (error) {
+		view.error = `Lỗi nạp danh sách tin tức: ${error.message}`;
+	}
+}
+
+loadArticles();

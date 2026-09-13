@@ -1,0 +1,83 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button, a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* TIÊU ĐỀ LỚN: FORM CHUẨN VALORANT - ĐÃ GIÃN KÝ TỰ THOÁNG ĐẸP, KHÔNG DÍNH NÉT */
+h1, h2, h3, h4, h5, h6,
+.hero h1,
+.showcase__heading h2,
+.agent-card__title h3,
+.weapon-card__title h3,
+.map-card__body h3,
+.page-header h1,
+.page-title,
+.article-title {
+  font-family: var(--font-display) !important;
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
+  /* Giãn chữ ra để các ký tự và dấu tiếng Việt không bị dính đè */
+  letter-spacing: 0.04em !important;     /* tương đương ~2px đến 3px tùy cỡ chữ */
+  word-spacing: 0.12em !important;       /* tạo khoảng cách rõ ràng giữa các từ */
+  line-height: 1.1 !important;
+}
+
+/* Riêng h1 tiêu đề lớn ở các đầu trang */
+h1, .page-header h1 {
+  letter-spacing: 0.05em !important;
+  word-spacing: 0.15em !important;
+}
+
+h2 {
+  font-size: clamp(32px, 5vw, 52px);
+}
+
+h3 {
+  font-size: clamp(20px, 3vw, 28px);
+}
+
+/* CÁC THẺ MÃ SỐ, PHÂN LOẠI, TELEMETRY VÀ NHÃN CHIẾN THUẬT */
+code,
+pre,
+.eyebrow,
+.hero__telemetry,
+.hero__status,
+.agent-card__number,
+.agent-card__role,
+.weapon-card__meta,
+.weapon-card__stats,
+.damage-table-fixed,
+.map-card__index,
+.map-card__coords,
+.tactical-cta-btn,
+.dossier-button,
+.btn-toggle {
+  font-family: var(--font-mono);
+}
+
+/* VĂN BẢN MÔ TẢ & TIỂU SỬ ĐẶC VỤ */
+p, span, li, input, textarea, select {
+  font-family: var(--font-sans);
+}

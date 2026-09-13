@@ -59,6 +59,8 @@ export class MockGameRepository extends IGameRepository {
   getWeapons() { return this.#weapons; }
   getMaps() { return this.#maps; }
   getArticles() { return this.#articles; }
+  getArticleById(id) { return this.#articles.find((article) => article.id === id) ?? null; }
+  createArticle(articleData) { return new ArticleEntity({ ...articleData, id: `mock-${Date.now()}`, publishedAt: new Date().toISOString() }); }
 
   getEntityById(type, id) {
     const collection = { agents: this.#agents, weapons: this.#weapons, maps: this.#maps }[type];

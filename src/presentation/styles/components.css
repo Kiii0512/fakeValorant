@@ -1,0 +1,48 @@
+.button { align-items: center; clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px)); display: inline-flex; font-family: var(--mono); font-size: 11px; font-weight: 600; gap: 18px; justify-content: center; letter-spacing: .12em; min-height: 48px; padding: 0 20px; text-transform: uppercase; transition: background .2s ease, color .2s ease, transform .2s ease; }
+
+.button:hover { transform: translateY(-2px); }
+
+.button--volt { background: var(--volt); color: #0a0b10; }
+
+.button--volt:hover { background: var(--cyan); }
+
+.button--cyan { background: var(--cyan); color: #0a0b10; }
+
+.button--cyan:hover { background: var(--volt); }
+
+.eyebrow { color: var(--cyan); font-family: var(--mono); font-size: 10px; letter-spacing: .18em; margin: 0 0 26px; text-transform: uppercase; }
+
+.eyebrow span { color: var(--faint); margin-left: 20px; }
+
+.text-link { color: var(--ink); font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+
+.text-link span { color: var(--cyan); padding-left: 8px; }
+
+.status-dot { background: var(--cyan); display: inline-block; height: 6px; width: 6px; }
+
+.featured-badge { align-items: center; border: 1px solid var(--volt); color: var(--volt); display: inline-flex; font-family: var(--mono); font-size: 8px; gap: 7px; letter-spacing: .09em; padding: 7px 9px; position: absolute; right: 14px; top: 14px; z-index: 2; }
+
+.featured-badge i { animation: signal-pulse 1.4s ease-in-out infinite; background: var(--volt); border-radius: 50%; display: inline-block; height: 5px; width: 5px; }
+
+.featured-badge--card { position: absolute; right: 22px; top: 62px; }
+
+.dossier-button { background: transparent; border: 1px solid rgba(0, 240, 255, .38); clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 7px 100%, 0 calc(100% - 7px)); color: var(--cyan); cursor: pointer; font-family: var(--mono); font-size: 9px; letter-spacing: .1em; margin-top: 22px; min-height: 36px; padding: 0 12px; transition: background .2s ease, border-color .2s ease, color .2s ease; }
+
+.dossier-button:hover, .dossier-button:focus-visible { background: var(--cyan); border-color: var(--cyan); color: var(--canvas); outline: none; }
+
+.dossier-button span { font-size: 15px; margin-left: 9px; }
+
+@keyframes signal-pulse { 0%, 100% { opacity: .35; transform: scale(.8); } 50% { opacity: 1; transform: scale(1.25); } }
+
+.data-state { border-top: 1px solid var(--line); color: var(--muted); font-family: var(--mono); font-size: 11px; letter-spacing: .1em; padding: 34px 10vw; text-transform: uppercase; }
+
+.data-state--error { color: #ff6d6d; }
+
+.button--outline { background: transparent; border: 1px solid var(--cyan); color: var(--cyan); }
+
+.button--outline:hover { background: var(--cyan); color: var(--canvas); }
+
+.loading-spinner { animation: detail-spin .8s linear infinite; border: 2px solid var(--line); border-top-color: var(--cyan); height: 30px; width: 30px; }
+
+@keyframes detail-spin { to { transform: rotate(360deg); } }
+

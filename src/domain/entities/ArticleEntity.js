@@ -1,12 +1,23 @@
 export class ArticleEntity {
-  constructor({ id, title, excerpt, category, publishedAt, readTime, imageUrl, featured = false }) {
+  constructor({
+    id,
+    title,
+    subtitle,
+    author,
+    mainImageUrl,
+    subImageUrl,
+    content,
+    publishedAt,
+    isFeatured = false // Thêm trường này
+  }) {
     this.id = id;
     this.title = title;
-    this.excerpt = excerpt;
-    this.category = category;
+    this.subtitle = subtitle;
+    this.author = author;
+    this.mainImageUrl = mainImageUrl;
+    this.subImageUrl = subImageUrl;
+    this.content = content;
     this.publishedAt = publishedAt;
-    this.readTime = readTime;
-    this.imageUrl = imageUrl;
-    this.featured = featured;
+    this.isFeatured = Boolean(isFeatured); // Thêm trường này
   }
 }

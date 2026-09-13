@@ -1,0 +1,26 @@
+:root {
+  color: #e8edf2;
+  background: #0a0b10;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-synthesis: none;
+
+  /* BẢNG MÀU TACTICAL */
+  --canvas: #0a0b10;
+  --panel: #0c0e14;
+  --panel-light: #11151d;
+  --ink: #e8edf2;
+  --muted: #7e8994;
+  --faint: #46515c;
+  --line: rgba(232, 237, 242, 0.12);
+  --cyan: #00f0ff;
+  --volt: var(--cyan);
+
+  /* FONT STACK CHUẨN VALORANT - HỖ TRỢ 100% TIẾNG VIỆT KHÔNG LỖI DẤU */
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-display: 'Barlow Condensed', 'Oswald', sans-serif;
+  --font-sans: 'Be Vietnam Pro', sans-serif;
+
+  /* Giữ alias tương thích ngược với code cũ */
+  --mono: var(--font-mono);
+  --display: var(--font-display);
+}

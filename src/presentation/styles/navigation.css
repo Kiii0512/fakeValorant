@@ -1,0 +1,46 @@
+.site-nav { align-items: center; background: rgba(10, 11, 16, 0.96); border-bottom: 1px solid var(--line); display: flex; height: 76px; justify-content: space-between; left: 0; padding: 0 5vw; position: fixed; right: 0; top: 0; z-index: 20; }
+
+.site-nav__brand { display: inline-flex; }
+
+.nexus-logo { align-items: center; display: inline-flex; gap: 10px; }
+
+.nexus-logo__mark { height: 36px; width: 36px; }
+
+.nexus-logo__outline { fill: none; stroke: var(--cyan); stroke-linejoin: bevel; stroke-width: 1.2; }
+
+.nexus-logo__slash { fill: var(--volt); opacity: .9; }
+
+.nexus-logo__cut { fill: var(--cyan); opacity: .28; }
+
+.nexus-logo__wordmark { color: var(--ink); font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: .08em; white-space: nowrap; }
+
+.nexus-logo__wordmark strong { color: var(--cyan); font-weight: 600; }
+
+.nexus-logo__wordmark span { color: var(--ink); }
+
+.site-nav__links { display: flex; gap: 28px; margin-left: auto; margin-right: 38px; }
+
+.site-nav__links a, .site-footer__bottom, .site-footer__note span { color: var(--muted); font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; transition: color .2s ease; }
+
+.site-nav__links a:hover, .site-footer__bottom a:hover { color: var(--cyan); }
+
+.site-nav__cta { min-height: 38px; }
+
+.nav-dropdown { position: relative; }
+
+.nav-dropdown summary { color: var(--muted); cursor: pointer; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; list-style: none; }
+
+.nav-dropdown summary::-webkit-details-marker { display: none; }
+
+.nav-dropdown summary span { color: var(--cyan); margin-left: 5px; }
+
+.nav-dropdown[open] summary, .nav-dropdown summary:hover { color: var(--cyan); }
+
+.nav-dropdown__menu { background: var(--panel); border: 1px solid var(--line); display: grid; gap: 14px; left: -12px; min-width: 180px; padding: 16px; position: absolute; top: 26px; z-index: 30; }
+
+.nav-dropdown__menu a { color: var(--muted); white-space: nowrap; }
+
+.nav-dropdown__menu a:hover { color: var(--cyan); }
+
+.agents-document .site-nav__links a, .agents-document .site-nav__links summary, .agents-document .site-footer__bottom, .agents-document .site-footer__note span { font-family: 'JetBrains Mono', var(--mono); }
+

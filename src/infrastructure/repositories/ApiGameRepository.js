@@ -1,4 +1,5 @@
 import { AgentEntity, MapEntity, WeaponEntity } from '../../domain/entities/GameEntities.js';
+import { ArticleEntity } from '../../domain/entities/ArticleEntity.js';
 import { IGameRepository } from '../../domain/repositories/IGameRepository.js';
 
 const API_BASE = 'http://localhost:5153/api';
@@ -19,10 +20,16 @@ export class ApiGameRepository extends IGameRepository {
       if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
       const data = await res.json();
 
-      return data.map((item) => {
+return data.map((item) => {
         const rawAbilities = item.abilities || [];
         
-        const abilities = rawAbilities.map((ab) => [ab.slot_key || ab.slotKey, ab.name]);
+        // Lưu trữ cả slot, tên và link icon chiêu thức
+        const abilities = rawAbilities.map((ab) => ({
+          slotKey: ab.slot_key || ab.slotKey || 'C',
+          name: ab.name || '',
+          iconUrl: ab.icon_url || ab.iconUrl || '',
+          description: ab.description || ''
+        }));
 
         const abilityDetails = {};
         const abilityVideos = {};
@@ -41,9 +48,9 @@ export class ApiGameRepository extends IGameRepository {
           bio: item.bio,
           description: item.bio ? (item.bio.slice(0, 75) + '...') : '',
           avatarUrl: item.avatarUrl || item.avatar_url || '',
-          abilities: abilities.length > 0 ? abilities : [['Q', 'N/A'], ['E', 'N/A'], ['C', 'N/A'], ['X', 'N/A']],
+          abilities: abilities,
           abilityDetails: abilityDetails,
-          isFeatured: item.isFeatured ?? item.is_featured ?? false
+          isFeatured: Boolean(item.isFeatured ?? item.is_featured ?? false)
         });
       });
     } catch (error) {
@@ -89,7 +96,7 @@ export class ApiGameRepository extends IGameRepository {
           damageTiers: rawTiers,
           altFireFunction: w.alt_fire_function || w.altFireFunction || w.AltFireFunction,
           altFireZoom: w.alt_fire_zoom || w.altFireZoom || w.AltFireZoom,
-          isFeatured: w.is_featured ?? w.isFeatured ?? false
+          isFeatured: Boolean(w.is_featured ?? w.isFeatured ?? false)
         });
       });
     } catch (error) {
@@ -110,13 +117,119 @@ export class ApiGameRepository extends IGameRepository {
         coordinates: m.coordinates,
         imageUrl: m.imageUrl || m.image_url,
         description: m.notes,
-        isFeatured: m.isFeatured ?? m.is_featured ?? false,
+        isFeatured: Boolean(m.isFeatured ?? m.is_featured ?? false),
         gallery: m.gallery || (m.imageUrl || m.image_url ? [m.imageUrl || m.image_url] : [])
       }));
     } catch (error) {
       console.error('ApiGameRepository.getMaps failed:', error);
       return [];
     }
+  }
+
+  async getArticles() {
+    try {
+      const res = await fetch(`${API_BASE}/articles`);
+      if (!res.ok) return [];
+      const data = await res.json();
+      return Array.isArray(data) ? data.map((article) => new ArticleEntity({
+        id: article.id,
+        title: article.title,
+        subtitle: article.subtitle,
+        author: article.author,
+        mainImageUrl: article.mainImageUrl || article.main_image_url,
+        subImageUrl: article.subImageUrl || article.sub_image_url,
+        content: article.content,
+        isFeatured: Boolean(article.isFeatured ?? article.is_featured ?? false),
+        publishedAt: article.publishedAt || article.published_at
+      })) : [];
+    } catch (error) {
+      console.error('ApiGameRepository.getArticles failed:', error);
+      return [];
+    }
+  }
+
+  async getArticleById(id) {
+    try {
+      const res = await fetch(`${API_BASE}/articles/${encodeURIComponent(id)}`);
+      if (!res.ok) return null;
+      const article = await res.json();
+      return new ArticleEntity({
+        id: article.id,
+        title: article.title,
+        subtitle: article.subtitle,
+        author: article.author,
+        mainImageUrl: article.mainImageUrl || article.main_image_url,
+        subImageUrl: article.subImageUrl || article.sub_image_url,
+        content: article.content,
+        isFeatured: Boolean(article.isFeatured ?? article.is_featured ?? false),
+        publishedAt: article.publishedAt || article.published_at
+      });
+    } catch (error) {
+      console.error('ApiGameRepository.getArticleById failed:', error);
+      return null;
+    }
+  }
+
+  async createArticle(articleData) {
+    const res = await fetch(`${API_BASE}/articles`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(articleData)
+    });
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`Đăng bài viết thất bại: ${errorText}`);
+    }
+    const article = await res.json();
+    return new ArticleEntity({
+      id: article.id,
+      title: article.title,
+      subtitle: article.subtitle,
+      author: article.author,
+      mainImageUrl: article.mainImageUrl || article.main_image_url,
+      subImageUrl: article.subImageUrl || article.sub_image_url,
+      content: article.content,
+      isFeatured: Boolean(article.isFeatured ?? article.is_featured ?? false),
+      publishedAt: article.publishedAt || article.published_at
+    });
+  }
+
+  async updateArticle(id, data) {
+    const res = await fetch(`${API_BASE}/articles/${encodeURIComponent(id)}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(`Cập nhật bài viết thất bại: ${err}`);
+    }
+    return await res.json();
+  }
+
+  async deleteArticle(id) {
+    const res = await fetch(`${API_BASE}/articles/${encodeURIComponent(id)}`, { 
+      method: 'DELETE' 
+    });
+    if (!res.ok) throw new Error('Xóa bài viết thất bại');
+    return await res.json();
+  }
+
+  async toggleArticleFeatured(id, isFeatured) {
+    const res = await fetch(`${API_BASE}/articles/${encodeURIComponent(id)}/toggle-featured`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        is_featured: Boolean(isFeatured), 
+        isFeatured: Boolean(isFeatured) 
+      }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ message: 'Thao tác thất bại' }));
+      throw new Error(err.message || `Lỗi server (${res.status})`);
+    }
+    return await res.json();
   }
 
   async getEntityById(type, id) {

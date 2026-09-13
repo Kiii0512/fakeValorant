@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nexus Protocol // Hướng Dẫn Tân Thủ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;0,900;1,800&family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Oswald:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./src/presentation/styles.css" />
+    <style>
+      body {
+        background-color: #ece8e1;
+        color: #0f1923;
+        font-family: 'Space Grotesk', sans-serif;
+        margin: 0;
+      }
+      /* Khoảng đệm an toàn để navbar fixed/absolute không che mất banner */
+      #guide-app {
+        padding-top: 80px;
+      }
+      .guide-hero {
+        position: relative;
+        background: #0f1923;
+        color: #fff;
+        padding-bottom: 20px;
+      }
+      .guide-hero__media {
+        width: 100%;
+        max-height: 480px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #000;
+      }
+      .guide-hero__media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      /* Card tiêu đề nằm gọn gàng bên dưới banner */
+      .guide-header-card {
+        max-width: 920px;
+        margin: -40px auto 0;
+        background: #ece8e1;
+        padding: 40px 32px 28px;
+        text-align: center;
+        position: relative;
+        z-index: 5;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      }
+      .guide-header-card h1 {
+        font-size: 42px;
+        font-weight: 900;
+        text-transform: uppercase;
+        margin: 0 0 12px 0;
+        color: #0f1923;
+        letter-spacing: -1px;
+      }
+      .guide-header-card p.subtitle {
+        font-size: 16px;
+        color: #768079;
+        margin: 0 0 16px 0;
+        line-height: 1.6;
+      }
+      .guide-header-card .meta-info {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 12px;
+        color: #ff4655;
+        font-weight: bold;
+      }
+      .guide-body {
+        max-width: 860px;
+        margin: 40px auto 80px;
+        padding: 0 24px;
+      }
+      .guide-chapter {
+        margin-bottom: 64px;
+      }
+      .guide-chapter h2 {
+        font-size: 28px;
+        font-weight: 900;
+        text-transform: uppercase;
+        color: #0f1923;
+        margin: 0 0 16px 0;
+        position: relative;
+        padding-left: 16px;
+      }
+      .guide-chapter h2::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 4px;
+        bottom: 4px;
+        width: 4px;
+        background: #ff4655;
+      }
+      .guide-chapter p {
+        font-size: 16px;
+        line-height: 1.85;
+        color: #383e3a;
+        margin-bottom: 24px;
+        white-space: pre-line;
+      }
+      .guide-media-frame {
+        width: 100%;
+        border-radius: 2px;
+        overflow: hidden;
+        margin: 20px 0;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        background: #000;
+      }
+      .guide-media-frame img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+      .guide-media-frame iframe {
+        width: 100%;
+        height: 480px;
+        border: none;
+        display: block;
+      }
+      @media (max-width: 768px) {
+        .guide-header-card h1 { font-size: 32px; }
+        .guide-media-frame iframe { height: 260px; }
+      }
+    </style>
+  </head>
+  <body>
+    <nexus-navbar></nexus-navbar>
+
+    <main id="guide-app">
+      <div id="guide-loading" style="text-align: center; padding: 120px 20px; font-family: 'JetBrains Mono', monospace;">
+        ĐANG TẢI HƯỚNG DẪN TÂN THỦ...
+      </div>
+
+      <div id="guide-content" style="display: none;">
+        <div class="guide-hero">
+          <div class="guide-hero__media">
+            <img id="guide-banner-img" src="" alt="Banner hướng dẫn" />
+          </div>
+          <div class="guide-header-card">
+            <h1 id="guide-title"></h1>
+            <p class="subtitle" id="guide-subtitle"></p>
+            <div class="meta-info"><span id="guide-author"></span> // <span id="guide-date"></span></div>
+          </div>
+        </div>
+
+        <div class="guide-body" id="guide-chapters-container"></div>
+      </div>
+
+      <!-- TIN TỨC LIÊN QUAN / NỔI BẬT Ở CUỐI TRANG -->
+      <section class="section showcase" id="featured-news-guide" style="padding: 60px 24px; background: #0a0b10; color: #fff;">
+        <div style="max-width: 1100px; margin: 0 auto;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 36px;">
+            <div>
+              <p style="color: #00f5d4; font-family: 'JetBrains Mono', monospace; font-size: 11px; margin-bottom: 8px;">TRANSMISSIONS // LATEST DISPATCHES</p>
+              <h2 style="font-size: 32px; font-weight: 700; margin: 0; text-transform: uppercase;">NHỮNG BÀI VIẾT <span style="color: #00f5d4;">LIÊN QUAN.</span></h2>
+            </div>
+            <a class="button button--outline" href="news.html" style="font-size: 11px; color:#fff; border-color:#00f5d4; padding:8px 16px; text-decoration:none;">TẤT CẢ BÀI VIẾT →</a>
+          </div>
+          <div id="guide-featured-news-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;"></div>
+        </div>
+      </section>
+    </main>
+
+    <nexus-footer></nexus-footer>
+
+    <script type="module">
+      import './src/presentation/components/NexusNavbar.js';
+      import './src/presentation/components/NexusFooter.js';
+
+      // Chuyển đổi mọi định dạng link YouTube thành link embed
+      const formatYoutubeEmbed = (url) => {
+        if (!url) return '';
+        const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([\w-]{11})/);
+        return match ? `https://www.youtube.com/embed/${match[1]}` : url;
+      };
+
+      const loadGuideData = async () => {
+        try {
+          const [guideRes, newsRes] = await Promise.all([
+            fetch('http://localhost:5153/api/guide'),
+            fetch('http://localhost:5153/api/articles/featured')
+          ]);
+
+          if (guideRes.ok) {
+            const guide = await guideRes.json();
+            document.querySelector('#guide-title').textContent = guide.title;
+            document.querySelector('#guide-subtitle').textContent = guide.subtitle || '';
+            document.querySelector('#guide-author').textContent = guide.author;
+            document.querySelector('#guide-date').textContent = new Date(guide.publishedAt).toLocaleDateString('vi-VN');
+            document.querySelector('#guide-banner-img').src = guide.bannerImageUrl;
+
+            let chapters = [];
+            try {
+              chapters = typeof guide.chaptersJson === 'string' ? JSON.parse(guide.chaptersJson) : (guide.chaptersJson || []);
+            } catch {
+              chapters = [];
+            }
+
+            const chapsContainer = document.querySelector('#guide-chapters-container');
+            chapsContainer.innerHTML = chapters.map((chap) => {
+              // HỖ TRỢ LINH HOẠT: CÓ THỂ CÓ VIDEO, CÓ ẢNH, HOẶC CÓ CẢ 2
+              let videoHtml = '';
+              let imageHtml = '';
+
+              if (chap.videoUrl && chap.videoUrl.trim() !== '') {
+                videoHtml = `
+                  <div class="guide-media-frame">
+                    <iframe src="${formatYoutubeEmbed(chap.videoUrl.trim())}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                  </div>
+                `;
+              }
+
+              if (chap.imageUrl && chap.imageUrl.trim() !== '') {
+                imageHtml = `
+                  <div class="guide-media-frame">
+                    <img src="${chap.imageUrl.trim()}" alt="${chap.title}" loading="lazy" />
+                  </div>
+                `;
+              }
+
+              // Xử lý chuỗi xuống dòng \n thô
+              const cleanContent = (chap.content || '').replace(/\\n/g, '\n');
+
+              return `
+                <div class="guide-chapter">
+                  <h2>${chap.title}</h2>
+                  <p>${cleanContent}</p>
+                  ${videoHtml}
+                  ${imageHtml}
+                </div>
+              `;
+            }).join('');
+
+            document.querySelector('#guide-loading').style.display = 'none';
+            document.querySelector('#guide-content').style.display = 'block';
+          }
+
+          if (newsRes.ok) {
+            const news = await newsRes.json();
+            const grid = document.querySelector('#guide-featured-news-grid');
+            grid.innerHTML = (news || []).slice(0, 3).map((art) => `
+              <a href="article-detail.html?id=${encodeURIComponent(art.id)}" style="display: flex; flex-direction: column; background: #141721; border: 1px solid #28344e; text-decoration: none; color: inherit; transition: transform 0.2s;">
+                <img src="${art.mainImageUrl || art.main_image_url || ''}" style="width: 100%; height: 170px; object-fit: cover;" />
+                <div style="padding: 18px;">
+                  <span style="font-size: 11px; font-family: monospace; color: #00f5d4;">${art.author || 'VALORANT STAFF'}</span>
+                  <h3 style="font-size: 16px; margin: 8px 0; font-weight: bold; color: #fff;">${art.title}</h3>
+                </div>
+              </a>
+            `).join('');
+          }
+        } catch (e) {
+          document.querySelector('#guide-loading').textContent = 'Lỗi tải bài viết: ' + e.message;
+        }
+      };
+
+      loadGuideData();
+    </script>
+  </body>
+</html>
