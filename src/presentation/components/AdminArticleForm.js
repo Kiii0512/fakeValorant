@@ -1,18 +1,9 @@
 import { ApiGameRepository } from '../../infrastructure/repositories/ApiGameRepository.js';
+import { createDefaultArticleHandlers } from './AdminArticleHelpers.js';
+import { bindMainImage, bindSubImagesContainer, clearMainImage, renderExistingSubImages, setExistingMainImage, setMainImageFile } from './AdminArticleMedia.js';
+import './AdminArticleTable.js';
 
 const API_BASE = 'https://fakevalorant-backend.onrender.com/api';
-
-const escapeHtml = (value = '') => String(value)
-  .replaceAll('&', '&amp;')
-  .replaceAll('<', '&lt;')
-  .replaceAll('>', '&gt;')
-  .replaceAll('"', '&quot;')
-  .replaceAll("'", '&#039;');
-
-const formatDate = (value) => {
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? 'N/A' : new Intl.DateTimeFormat('vi-VN').format(date);
-};
 
 const defaultRepo = new ApiGameRepository();
 
@@ -25,20 +16,7 @@ export class AdminArticleForm extends HTMLElement {
 
   connectedCallback() {
     if (!this._h) {
-      this._h = {
-        onLoadArticles: () => defaultRepo.getArticles(),
-        onToggleFeatured: (id, state) => defaultRepo.toggleArticleFeatured(id, state),
-        onDeleteArticle: (id) => defaultRepo.deleteArticle(id),
-        onUpdateArticle: (id, data) => defaultRepo.updateArticle(id, data),
-        onSaveArticle: (data) => defaultRepo.createArticle(data),
-        onUpload: async (file, bucket = 'agent-media') => {
-          const fd = new FormData();
-          fd.append('file', file);
-          const res = await fetch(`${API_BASE}/admin/upload?bucket=${bucket}`, { method: 'POST', body: fd });
-          const d = await res.json();
-          return d.url || d.Url || '';
-        }
-      };
+      this._h = createDefaultArticleHandlers(API_BASE, defaultRepo);
     }
     this.render();
     this.loadArticles();
@@ -167,7 +145,7 @@ export class AdminArticleForm extends HTMLElement {
 
         <div id="article-status" class="admin-message" hidden></div>
 
-        <div id="article-table-wrap">Đang tải danh sách bài viết...</div>
+        <admin-article-table id="article-table-wrap">Đang tải danh sách bài viết...</admin-article-table>
 
         <form id="form-article" style="display: none; margin-top: 36px; padding-top: 28px; border-top: 2px dashed var(--line, #28344e);">
           <h1 id="article-form-title" style="color: var(--cyan, #00f5d4);">BẢNG QUẢN TRỊ // TIN TỨC</h1>
@@ -227,8 +205,8 @@ export class AdminArticleForm extends HTMLElement {
       </section>
     `;
 
-    this.bindMainImage();
-    this.bindSubImagesContainer();
+    bindMainImage(this);
+    bindSubImagesContainer(this);
 
     this.querySelector('#toggle-article-form-btn').onclick = () => {
       this.resetForm();
@@ -241,211 +219,35 @@ export class AdminArticleForm extends HTMLElement {
   }
 
   bindMainImage() {
-    const container = this.querySelector('[data-image-field="main"]');
-    const picker = container.querySelector('[data-picker]');
-    const input = container.querySelector('.admin-image-picker__input');
-
-    input.addEventListener('change', () => this.setMainImageFile(input.files[0]));
-    picker.addEventListener('dragover', (e) => { e.preventDefault(); picker.classList.add('is-dragging'); });
-    picker.addEventListener('dragleave', () => picker.classList.remove('is-dragging'));
-    picker.addEventListener('drop', (e) => {
-      e.preventDefault();
-      picker.classList.remove('is-dragging');
-      this.setMainImageFile(e.dataTransfer.files[0]);
-    });
-
-    container.querySelector('[data-remove-image]').addEventListener('click', (e) => {
-      e.stopPropagation();
-      this.clearMainImage();
-    });
+    bindMainImage(this);
   }
 
   setMainImageFile(file) {
-    if (!file) return;
-    if (!file.type.startsWith('image/')) {
-      this.setStatus('Chỉ hỗ trợ file ảnh PNG, JPG hoặc WEBP.', true);
-      return;
-    }
-    if (this._mainImageState.previewUrl.startsWith('blob:')) {
-      URL.revokeObjectURL(this._mainImageState.previewUrl);
-    }
-    this._mainImageState.file = file;
-    this._mainImageState.previewUrl = URL.createObjectURL(file);
-
-    const container = this.querySelector('[data-image-field="main"]');
-    const picker = container.querySelector('[data-picker]');
-    const preview = container.querySelector('.admin-image-picker__preview');
-    preview.querySelector('img').src = this._mainImageState.previewUrl;
-    preview.hidden = false;
-    container.querySelector('.admin-image-picker__empty').hidden = true;
-    picker.classList.add('has-preview');
+    setMainImageFile(this, file);
   }
 
   setExistingMainImage(url) {
-    if (!url) return;
-    this._mainImageState = { file: null, previewUrl: url };
-    const container = this.querySelector('[data-image-field="main"]');
-    const picker = container.querySelector('[data-picker]');
-    const preview = container.querySelector('.admin-image-picker__preview');
-    preview.querySelector('img').src = url;
-    preview.hidden = false;
-    container.querySelector('.admin-image-picker__empty').hidden = true;
-    picker.classList.add('has-preview');
+    setExistingMainImage(this, url);
   }
 
   clearMainImage() {
-    if (this._mainImageState.previewUrl.startsWith('blob:')) {
-      URL.revokeObjectURL(this._mainImageState.previewUrl);
-    }
-    this._mainImageState = { file: null, previewUrl: '' };
-
-    const container = this.querySelector('[data-image-field="main"]');
-    const picker = container.querySelector('[data-picker]');
-    const preview = container.querySelector('.admin-image-picker__preview');
-    container.querySelector('.admin-image-picker__input').value = '';
-    preview.hidden = true;
-    preview.querySelector('img').src = '';
-    container.querySelector('.admin-image-picker__empty').hidden = false;
-    picker.classList.remove('has-preview');
+    clearMainImage(this);
   }
 
   bindSubImagesContainer() {
-    const subContainer = this.querySelector('#sub-images-container');
-    const addBtn = this.querySelector('#add-sub-image-btn');
-
-    addBtn.onclick = () => {
-      const count = subContainer.querySelectorAll('.sub-image-row').length + 1;
-      const row = document.createElement('div');
-      row.className = 'sub-image-row';
-      row.style.cssText = 'display: flex; gap: 10px; align-items: center; background: var(--panel-light, #141721); padding: 10px 14px; border: 1px solid var(--line, #28344e);';
-      row.innerHTML = `
-        <span class="sub-image-index" style="color: var(--cyan, #00f5d4); font-family: var(--mono, monospace); font-size: 11px; min-width: 80px;">ẢNH PHỤ #${count}</span>
-        <input type="file" class="single-sub-file" accept="image/*" style="flex: 1;" />
-        <button type="button" class="remove-sub-img-btn" style="background: transparent; border: 1px solid rgba(255,100,112,0.4); color: #ff6470; font-family: var(--mono, monospace); font-size: 10px; padding: 8px 12px; cursor: pointer;">XÓA</button>
-      `;
-      subContainer.appendChild(row);
-    };
-
-    subContainer.addEventListener('click', (e) => {
-      const removeBtn = e.target.closest('.remove-sub-img-btn');
-      if (removeBtn) {
-        removeBtn.closest('.sub-image-row').remove();
-        subContainer.querySelectorAll('.sub-image-row').forEach((r, idx) => {
-          const span = r.querySelector('.sub-image-index');
-          if (span) span.textContent = `ẢNH PHỤ #${idx + 1}`;
-        });
-      }
-    });
+    bindSubImagesContainer(this);
   }
 
   renderList() {
-    const wrap = this.querySelector('#article-table-wrap');
-    if (!wrap) return;
-    const articles = this._articles || [];
-
-    wrap.innerHTML = `
-      <table class="admin-table">
-        <thead>
-          <tr>
-            <th>Ảnh Bìa</th>
-            <th>Ngày Đăng</th>
-            <th>Tiêu Đề Bài Viết</th>
-            <th>Tác Giả</th>
-            <th>Nổi Bật (Tối Đa 3 Bài)</th>
-            <th>Hành Động</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${articles.length === 0 ? '<tr><td colspan="6">Chưa có bài viết nào được đăng.</td></tr>' : ''}
-          ${articles.map((a) => {
-            const isFeatured = Boolean(a.isFeatured ?? a.is_featured ?? a.IsFeatured ?? false);
-            return `
-              <tr>
-                <td><img src="${a.mainImageUrl || a.main_image_url || ''}" width="60" height="34" style="object-fit: cover; border-radius: 2px; background: #141721;" alt="" /></td>
-                <td>${formatDate(a.publishedAt || a.published_at)}</td>
-                <td><strong>${escapeHtml(a.title)}</strong></td>
-                <td>${escapeHtml(a.author || 'VALORANT')}</td>
-                <td>
-                  <button type="button" class="btn-toggle ${isFeatured ? 'active' : 'inactive'}" data-article-toggle="${a.id}" data-current="${isFeatured}">
-                    ${isFeatured ? '★ NỔI BẬT' : '☆ BÌNH THƯỜNG'}
-                  </button>
-                </td>
-                <td>
-                  <div class="action-group">
-                    <a href="/article-detail.html?id=${encodeURIComponent(a.id)}" target="_blank" class="btn-action-edit" style="text-decoration:none; padding:6px 10px;">XEM ↗</a>
-                    <button type="button" class="btn-action-edit" data-edit-article="${a.id}">SỬA</button>
-                    <button type="button" class="btn-action-del" data-del-article="${a.id}">XÓA</button>
-                  </div>
-                </td>
-              </tr>
-            `;
-          }).join('')}
-        </tbody>
-      </table>
-    `;
-
-    wrap.querySelectorAll('[data-article-toggle]').forEach((btn) => {
-      btn.onclick = async (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        const id = btn.dataset.articleToggle;
-        const current = btn.dataset.current === 'true';
-        const nextState = !current;
-
-        btn.disabled = true;
-        btn.textContent = 'ĐANG ĐỔI...';
-
-        try {
-          let toggleHandler = this._h?.onToggleFeatured;
-          if (!toggleHandler) {
-            toggleHandler = (artId, state) => defaultRepo.toggleArticleFeatured(artId, state);
-          }
-
-          await toggleHandler(id, nextState);
-
-          const target = this._articles.find(x => String(x.id).toLowerCase() === String(id).toLowerCase());
-          if (target) {
-            target.isFeatured = nextState;
-            target.is_featured = nextState;
-            target.IsFeatured = nextState;
-          }
-
-          btn.dataset.current = String(nextState);
-          btn.className = `btn-toggle ${nextState ? 'active' : 'inactive'}`;
-          btn.textContent = nextState ? '★ NỔI BẬT' : '☆ BÌNH THƯỜNG';
-          btn.disabled = false;
-
-          await this.loadArticles();
-        } catch (err) {
-          alert(err.message || 'Lỗi cập nhật cờ nổi bật');
-          btn.disabled = false;
-          btn.className = `btn-toggle ${current ? 'active' : 'inactive'}`;
-          btn.textContent = current ? '★ NỔI BẬT' : '☆ BÌNH THƯỜNG';
-        }
-      };
-    });
-
-    wrap.querySelectorAll('[data-edit-article]').forEach((btn) => {
-      btn.onclick = () => {
-        const id = btn.dataset.editArticle;
-        const art = this._articles.find((x) => String(x.id).toLowerCase() === String(id).toLowerCase());
-        if (art) this.populateForm(art);
-      };
-    });
-
-    wrap.querySelectorAll('[data-del-article]').forEach((btn) => {
-      btn.onclick = async () => {
-        if (!confirm('Bạn có chắc chắn muốn xóa vĩnh viễn bài viết này?')) return;
-        try {
-          const delHandler = this._h?.onDeleteArticle || ((artId) => defaultRepo.deleteArticle(artId));
-          await delHandler(btn.dataset.delArticle);
-          await this.loadArticles();
-        } catch (err) {
-          alert(err.message);
-        }
-      };
-    });
+    const table = this.querySelector('#article-table-wrap');
+    if (!table) return;
+    table.handlers = {
+      onToggleFeatured: (id, state) => (this._h?.onToggleFeatured || ((articleId, nextState) => defaultRepo.toggleArticleFeatured(articleId, nextState)))(id, state),
+      onDeleteArticle: (id) => (this._h?.onDeleteArticle || ((articleId) => defaultRepo.deleteArticle(articleId)))(id),
+      onEdit: (article) => this.populateForm(article),
+      onReload: () => this.loadArticles()
+    };
+    table.data = this._articles || [];
   }
 
   populateForm(article) {
@@ -467,26 +269,7 @@ export class AdminArticleForm extends HTMLElement {
     this._existingSubImages = rawSub ? rawSub.split(',').filter(Boolean) : [];
     const subContainer = this.querySelector('#sub-images-container');
     subContainer.innerHTML = '';
-
-    this._existingSubImages.forEach((url, idx) => {
-      const row = document.createElement('div');
-      row.className = 'sub-image-row existing-sub-row';
-      row.style.cssText = 'display: flex; gap: 10px; align-items: center; background: var(--panel-light, #141721); padding: 10px 14px; border: 1px solid var(--line, #28344e);';
-      row.innerHTML = `
-        <span class="sub-image-index" style="color: var(--cyan, #00f5d4); font-family: var(--mono, monospace); font-size: 11px; min-width: 80px;">ẢNH CŨ #${idx + 1}</span>
-        <a href="${url}" target="_blank" style="color:#fff; font-size:11px; flex:1; text-decoration:underline; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${url}</a>
-        <button type="button" class="remove-existing-sub-btn" data-url="${url}" style="background: transparent; border: 1px solid rgba(255,100,112,0.4); color: #ff6470; font-family: var(--mono, monospace); font-size: 10px; padding: 8px 12px; cursor: pointer;">XÓA</button>
-      `;
-      subContainer.appendChild(row);
-    });
-
-    subContainer.querySelectorAll('.remove-existing-sub-btn').forEach(btn => {
-      btn.onclick = () => {
-        const u = btn.dataset.url;
-        this._existingSubImages = this._existingSubImages.filter(x => x !== u);
-        btn.closest('.existing-sub-row').remove();
-      };
-    });
+    renderExistingSubImages(this);
 
     form.scrollIntoView({ behavior: 'smooth' });
   }

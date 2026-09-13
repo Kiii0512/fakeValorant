@@ -1,0 +1,137 @@
+.maps { background: #0c0e14; }
+
+.map-grid { display: grid; gap: 18px; grid-template-columns: repeat(3, 1fr); }
+
+.map-card { border: 1px solid var(--line); background: var(--canvas); }
+
+.map-card__visual { background: #141a20; height: 230px; overflow: hidden; position: relative; }
+
+.map-card__visual::after { background: linear-gradient(90deg, rgba(10, 11, 16, .7), transparent 60%); content: ''; inset: 0; position: absolute; }
+
+.map-card__visual img { height: 100%; object-fit: cover; opacity: .48; width: 100%; }
+
+.map-card__index, .map-card__coords { font-family: var(--mono); font-size: 9px; letter-spacing: .13em; position: absolute; text-transform: uppercase; z-index: 1; }
+
+.map-card__index { color: var(--cyan); left: 18px; top: 18px; }
+
+.map-card__coords { bottom: 18px; color: var(--ink); line-height: 1.7; right: 18px; text-align: right; }
+
+.map-card__body { align-items: center; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; padding: 20px 22px; }
+
+.map-card h3 { font-size: 37px; margin-bottom: 3px; }
+
+.map-card__body p { color: var(--muted); font-family: var(--mono); font-size: 10px; margin: 0; text-transform: uppercase; }
+
+.map-card__pin { color: var(--cyan); font-size: 26px; }
+
+.map-card__description { color: var(--muted); font-size: 13px; line-height: 1.6; min-height: 64px; padding: 0 22px; }
+
+.map-card__features { display: flex; flex-wrap: wrap; gap: 7px; padding: 0 22px 22px; }
+
+.map-card__features span { border: 1px solid var(--line); color: var(--faint); font-family: var(--mono); font-size: 8px; letter-spacing: .08em; padding: 7px 8px; text-transform: uppercase; }
+
+.map-card .dossier-button { margin: 0 22px 22px; }
+
+.map-dossier-grid { display: grid; gap: 24px; }
+
+.map-dossier-card { border: 1px solid var(--line); display: grid; grid-template-columns: 1.15fr .85fr; }
+
+.map-dossier-card__visual { min-height: 430px; overflow: hidden; position: relative; }
+
+.map-dossier-card__visual::after { background: linear-gradient(90deg, rgba(10, 11, 16, .65), transparent 70%); content: ''; inset: 0; position: absolute; }
+
+.map-dossier-card__visual img { height: 100%; object-fit: cover; opacity: .6; width: 100%; }
+
+.map-dossier-card__visual span, .map-dossier-card__visual small { color: var(--cyan); font-family: var(--mono); font-size: 9px; letter-spacing: .12em; position: absolute; z-index: 1; }
+
+.map-dossier-card__visual span { left: 22px; top: 22px; }
+
+.map-dossier-card__visual small { bottom: 22px; color: var(--ink); line-height: 1.8; right: 22px; text-align: right; }
+
+.map-dossier-card__body { padding: 44px; }
+
+.map-dossier-card__body h2 { font-size: 62px; margin-top: 10px; }
+
+.map-dossier-card__body > p { color: var(--muted); font-size: 14px; line-height: 1.7; }
+
+.map-callouts { border-top: 1px solid var(--line); margin-top: 32px; padding-top: 18px; }
+
+.map-callouts > span { color: var(--faint); font-family: var(--mono); font-size: 9px; letter-spacing: .1em; }
+
+.map-callouts > div { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+
+.map-callouts b { border: 1px solid var(--line); color: var(--cyan); font-family: var(--mono); font-size: 9px; font-weight: 400; padding: 8px; }
+
+.agent-card-full .dossier-button { display: inline-flex; margin-top: 20px; }
+
+.map-thumbnails-row {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.map-thumbnails-row::-webkit-scrollbar {
+  display: none;
+}
+
+.map-nav-tracker {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 14px;
+}
+
+.map-nav-numbers {
+  display: flex;
+  gap: 16px;
+  color: var(--faint);
+  font-family: var(--mono);
+  font-size: 11px;
+}
+
+.map-nav-numbers span {
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.map-nav-numbers span.active {
+  color: var(--cyan);
+  font-weight: 700;
+}
+
+.map-nav-line {
+  flex: 1;
+  height: 2px;
+  background: var(--line);
+  position: relative;
+  overflow: hidden;
+}
+
+.map-nav-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 25%;
+  background: var(--cyan);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s;
+}
+
+.map-nav-arrow {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+}
+
+.map-nav-arrow:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
